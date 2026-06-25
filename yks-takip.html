@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Burak YKS DERS</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Burak YKS DERS">
+<meta name="theme-color" content="#0e1420">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=">
+
+<style>
+:root{
+  --ink:#f2efe6;
+  --paper:#0e1420;
+  --paper-dim:#161d2c;
+  --line:#2a3346;
+  --gold:#e8a23c;
+  --ok:#4fae7a;
+  --gray:#7c8499;
+  --card:#131a28;
+
+  --c-turkce:#e8a23c;
+  --c-matematik:#e0623f;
+  --c-tarih:#c98a4b;
+  --c-cografya:#4fae7a;
+  --c-harita:#3fb6a8;
+  --c-felsefe:#9d7fd1;
+  --c-din:#d4af5a;
+  --c-fizik:#4d8fd6;
+  --c-kimya:#4fae7a;
+  --c-biyoloji:#d6679a;
+}
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{
+  font-family:'Iowan Old Style','Georgia',serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  padding-bottom:90px;
+  -webkit-font-smoothing:antialiased;
+}
+
+.head{
+  position:sticky; top:0; z-index:20;
+  background:var(--paper);
+  border-bottom:2px solid var(--line);
+  padding:env(safe-area-inset-top) 20px 0 20px;
+}
+.head-inner{
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding:14px 0 12px 0;
+}
+.brand{
+  font-family:'Times New Roman', serif;
+  font-weight:700;
+  font-size:22px;
+  letter-spacing:0.5px;
+}
+.brand span{color:var(--c-matematik);}
+.tarih{
+  font-family:-apple-system, sans-serif;
+  font-size:12px;
+  color:var(--gray);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.gunluksayac{
+  display:flex; gap:6px; padding:0 0 12px 0; overflow-x:auto;
+}
+.gun-nokta{
+  flex:1; min-width:6px; height:5px; border-radius:2px;
+  background:var(--paper-dim); border:1px solid var(--line);
+}
+.gun-nokta.dolu{background:var(--gold); border-color:var(--gold);}
+
+.sayfa{padding:18px 18px 0 18px;}
+
+.ozet-kart{
+  background:linear-gradient(135deg, var(--card), #1a2336); color:var(--ink); border:1px solid var(--line);
+  border-radius:14px; padding:18px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:18px;
+}
+.ozet-sayi{font-size:30px; font-weight:700; font-family:'Times New Roman',serif; line-height:1;}
+.ozet-etiket{font-family:-apple-system,sans-serif; font-size:10.5px; text-transform:uppercase; letter-spacing:0.8px; color:#c9c3b3; margin-top:4px;}
+.ozet-blok{text-align:center; flex:1;}
+.ozet-ayrac{width:1px; background:rgba(255,255,255,0.15); align-self:stretch; margin:0 4px;}
+
+.sinav-sekmeler{
+  display:flex; gap:10px; margin-bottom:16px;
+}
+.sekme{
+  flex:1; text-align:center; padding:11px 0;
+  font-family:-apple-system, sans-serif; font-weight:600; font-size:14px;
+  border:2px solid var(--line); border-radius:10px;
+  background:transparent; color:var(--ink);
+  letter-spacing:0.5px;
+}
+.sekme.aktif{background:var(--gold); color:var(--paper); border-color:var(--gold);}
+
+.arama-kutu{
+  width:100%; padding:11px 14px; margin-bottom:16px;
+  border:1.5px solid var(--line); border-radius:10px;
+  background:var(--card); font-family:-apple-system,sans-serif; font-size:14px;
+  color:var(--ink);
+}
+.arama-kutu::placeholder{color:var(--gray);}
+
+.ders-blok{margin-bottom:14px; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--card);}
+
+.ders-baslik{
+  display:flex; align-items:center; gap:10px;
+  padding:14px 14px;
+  cursor:pointer;
+}
+.renk-cubuk{width:5px; height:18px; border-radius:2px; display:inline-block; flex-shrink:0;}
+.ders-baslik h2{
+  font-size:16px; margin:0; font-weight:700;
+  font-family:'Times New Roman', serif;
+  flex-shrink:0;
+}
+.ders-baslik .kaynak{
+  font-family:-apple-system,sans-serif; font-size:10.5px; color:var(--gray);
+  margin-left:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.ders-baslik .konu-sayisi{
+  margin-left:auto; flex-shrink:0;
+  font-family:-apple-system,sans-serif; font-size:11px; color:var(--gray);
+}
+.ok-ikon{width:14px; height:14px; flex-shrink:0; transition:transform .2s; color:var(--gray);}
+.ders-blok.acik .ok-ikon{transform:rotate(180deg);}
+
+.ders-ilerleme-cubuk{
+  height:4px; background:var(--paper-dim); margin:0 14px 14px 14px; border-radius:3px; overflow:hidden;
+}
+.ders-ilerleme-ic{height:100%; border-radius:3px; transition:width .3s;}
+
+.konu-liste{
+  border-top:1px solid var(--line);
+  max-height:0; overflow:hidden;
+  transition:max-height .25s ease;
+}
+.ders-blok.acik .konu-liste{max-height:none;}
+
+.konu{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+}
+.konu:last-child{border-bottom:none;}
+.konu.tamam{background:rgba(79,174,122,0.10);}
+.konu.gizli-arama{display:none;}
+
+.kutucuk{
+  width:21px; height:21px; border-radius:6px;
+  border:2px solid var(--line);
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--card);
+}
+.kutucuk svg{width:12px; height:12px; display:none;}
+.konu.tamam .kutucuk{background:var(--ok); border-color:var(--ok);}
+.konu.tamam .kutucuk svg{display:block;}
+
+.konu-ad{
+  flex:1; font-size:14.5px; line-height:1.3;
+}
+.konu.tamam .konu-ad{color:var(--gray); text-decoration:line-through; text-decoration-color:var(--gray); text-decoration-thickness:1px;}
+
+.soru-girisi{
+  display:flex; align-items:center; gap:4px;
+  font-family:-apple-system, sans-serif;
+}
+.soru-girisi input{
+  width:36px; text-align:center;
+  border:1px solid var(--line); border-radius:6px;
+  padding:5px 2px; font-size:12.5px;
+  font-family:-apple-system, sans-serif;
+  background:var(--paper-dim);
+}
+.soru-girisi span{font-size:10.5px; color:var(--gray);}
+
+.alt-nav{
+  position:fixed; bottom:0; left:0; right:0;
+  background:var(--card);
+  display:flex;
+  padding:8px 6px env(safe-area-inset-bottom) 6px;
+  z-index:30;
+  border-top:1px solid #000;
+}
+.nav-btn{
+  flex:1; text-align:center; padding:8px 0 4px;
+  background:none; border:none; color:#9a948a;
+  font-family:-apple-system, sans-serif; font-size:10.5px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  letter-spacing:0.3px;
+}
+.nav-btn.aktif{color:var(--gold);}
+.nav-btn svg{width:21px; height:21px;}
+
+.gizli{display:none !important;}
+
+.istatistik-kart{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:16px; margin-bottom:14px;
+}
+.istatistik-kart h3{
+  margin:0 0 10px 0; font-size:13px; font-family:-apple-system,sans-serif;
+  font-weight:700; color:var(--ink); text-transform:uppercase; letter-spacing:0.5px;
+}
+.cubuk-satir{display:flex; align-items:center; gap:10px; margin-bottom:9px; font-family:-apple-system,sans-serif;}
+.cubuk-etiket{width:96px; font-size:11.5px; flex-shrink:0;}
+.cubuk-arka{flex:1; height:9px; background:var(--paper-dim); border-radius:5px; overflow:hidden;}
+.cubuk-ic{height:100%; border-radius:5px;}
+.cubuk-yuzde{width:36px; text-align:right; font-size:11px; color:var(--gray); flex-shrink:0;}
+
+.reset-btn{
+  width:100%; padding:13px; margin-top:6px;
+  background:none; border:1.5px solid var(--c-matematik); color:var(--c-matematik);
+  border-radius:10px; font-family:-apple-system,sans-serif; font-weight:600; font-size:13px;
+}
+
+.tumunu-btn{
+  display:flex; gap:8px; margin-bottom:14px;
+}
+.tumunu-btn button{
+  flex:1; padding:9px 0; font-family:-apple-system,sans-serif; font-size:12px; font-weight:600;
+  border:1.3px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink);
+}
+
+.plan-kart{
+  background:linear-gradient(135deg, var(--card), #1a2336);
+  border:1px solid var(--line); border-radius:14px;
+  padding:18px; margin-bottom:16px;
+}
+.plan-kart-ust{
+  display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;
+}
+.plan-gun-no{
+  font-family:'Times New Roman',serif; font-weight:700; font-size:20px; color:var(--gold);
+}
+.plan-durum{
+  font-family:-apple-system,sans-serif; font-size:11px; text-transform:uppercase;
+  letter-spacing:0.8px; color:var(--gray);
+}
+.plan-aciklama{
+  font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); line-height:1.5; opacity:0.85;
+}
+
+.bugun-ders-grup{margin-bottom:12px;}
+.bugun-ders-baslik{
+  display:flex; align-items:center; gap:8px; margin-bottom:6px; padding-left:2px;
+}
+.bugun-ders-baslik .renk-cubuk{width:4px; height:14px;}
+.bugun-ders-baslik span{
+  font-family:-apple-system,sans-serif; font-weight:700; font-size:13px; letter-spacing:0.3px;
+}
+
+.bugun-konu{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px; margin-bottom:6px;
+  background:var(--card); border:1px solid var(--line); border-radius:10px;
+}
+.bugun-konu.tamam{background:rgba(79,174,122,0.10); border-color:rgba(79,174,122,0.3);}
+.bugun-konu .konu-ad{flex:1; font-size:14px; line-height:1.3;}
+.bugun-konu.tamam .konu-ad{color:var(--gray); text-decoration:line-through;}
+
+.tamamlandi-kart{
+  text-align:center; padding:36px 18px;
+  font-family:-apple-system,sans-serif; color:var(--gray); font-size:13px; line-height:1.6;
+}
+.tamamlandi-kart .buyuk-emoji{font-size:34px; margin-bottom:10px; display:block;}
+
+.plan-not-kart{
+  margin-top:18px; padding:14px 16px;
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  font-family:-apple-system,sans-serif; font-size:12px; color:var(--gray); line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="head-inner">
+    <div class="brand">Burak<span>•</span>YKS DERS</div>
+    <div class="tarih" id="bugunTarih"></div>
+  </div>
+  <div class="gunluksayac" id="gunSayac"></div>
+</div>
+
+<!-- BUGÜN SAYFASI -->
+<div class="sayfa" id="sayfa-bugun">
+
+  <div class="plan-kart">
+    <div class="plan-kart-ust">
+      <div class="plan-gun-no" id="planGunNo">Gün 1</div>
+      <div class="plan-durum" id="planDurum">TYT dönemi</div>
+    </div>
+    <div class="plan-aciklama" id="planAciklama"></div>
+  </div>
+
+  <div id="bugunListesi"></div>
+
+  <div class="plan-not-kart" id="planNotKart"></div>
+
+</div>
+
+<!-- ANA SAYFA -->
+<div class="sayfa gizli" id="sayfa-ana">
+
+  <div class="ozet-kart">
+    <div class="ozet-blok">
+      <div class="ozet-sayi" id="ozetTamam">0</div>
+      <div class="ozet-etiket">Tamam</div>
+    </div>
+    <div class="ozet-ayrac"></div>
+    <div class="ozet-blok">
+      <div class="ozet-sayi" id="ozetToplam">0</div>
+      <div class="ozet-etiket">Konu</div>
+    </div>
+    <div class="ozet-ayrac"></div>
+    <div class="ozet-blok">
+      <div class="ozet-sayi" id="ozetSoru">0</div>
+      <div class="ozet-etiket">Soru</div>
+    </div>
+    <div class="ozet-ayrac"></div>
+    <div class="ozet-blok">
+      <div class="ozet-sayi" id="ozetYuzde">%0</div>
+      <div class="ozet-etiket">İlerleme</div>
+    </div>
+  </div>
+
+  <div class="sinav-sekmeler">
+    <button class="sekme aktif" data-sinav="TYT" onclick="sinavSec('TYT')">TYT</button>
+    <button class="sekme" data-sinav="AYT" onclick="sinavSec('AYT')">AYT</button>
+  </div>
+
+  <input class="arama-kutu" id="aramaKutu" type="text" placeholder="Konu ara…" oninput="aramaUygula()">
+
+  <div class="tumunu-btn">
+    <button onclick="hepsiniAc()">Hepsini Aç</button>
+    <button onclick="hepsiniKapat()">Hepsini Kapat</button>
+  </div>
+
+  <div id="dersAlani"></div>
+
+</div>
+
+<!-- İSTATİSTİK SAYFASI -->
+<div class="sayfa gizli" id="sayfa-istatistik">
+  <div class="istatistik-kart">
+    <h3>Ders Bazlı İlerleme</h3>
+    <div id="istatistikIcerik"></div>
+  </div>
+  <div class="istatistik-kart">
+    <h3>Veri</h3>
+    <button class="reset-btn" onclick="sifirla()">Tüm İlerlemeyi Sıfırla</button>
+  </div>
+</div>
+
+<div class="alt-nav">
+  <button class="nav-btn aktif" data-sayfa="bugun" onclick="sayfaGec('bugun')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+    Bugün
+  </button>
+  <button class="nav-btn" data-sayfa="ana" onclick="sayfaGec('ana')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l8-8 8 8M6 10v10h12V10"/></svg>
+    Konular
+  </button>
+  <button class="nav-btn" data-sayfa="istatistik" onclick="sayfaGec('istatistik')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+    İstatistik
+  </button>
+</div>
+
+<script>
+/* ---------- VERİ TANIMI ---------- */
+const DERS_RENK = {
+  "Türkçe":"var(--c-turkce)",
+  "Matematik":"var(--c-matematik)",
+  "Tarih":"var(--c-tarih)",
+  "Coğrafya":"var(--c-cografya)",
+  "Dünya Harita Bilgisi":"var(--c-harita)",
+  "Felsefe":"var(--c-felsefe)",
+  "Din Kültürü":"var(--c-din)",
+  "Fizik":"var(--c-fizik)",
+  "Kimya":"var(--c-kimya)",
+  "Biyoloji":"var(--c-biyoloji)"
+};
+
+const MUFREDAT = {
+TYT: [
+{ ders:"Türkçe", kaynak:"Kadir GÜMÜŞ", konular:[
+"TYT Türkçede 40'ta 40 Nasıl Yapılır?",
+"Ses Bilgisi 1","Ses Bilgisi 2","Ses Bilgisi 3",
+"Yazım Kuralları 1","Yazım Kuralları 2","Yazım Kuralları 3","Yazım Kuralları 4","Yazım Kuralları 5","Yazım Kuralları 6",
+"Noktalama İşaretleri 1","Noktalama İşaretleri 2","Noktalama İşaretleri 3","Noktalama İşaretleri 4",
+"Sözcükte Yapı 1 (Kök Bilgisi)","Sözcükte Yapı 2 (İsim Çekim Ekleri)","Sözcükte Yapı 3 (Fiil Çekim Ekleri)","Sözcükte Yapı 4 (Yapım Ekleri)","Sözcükte Yapı 5 (Sözcüğün Yapısı)",
+"İsim (Ad)","Sıfat 1","Sıfat 2","Zamir (Adıl) 1","Zamir (Adıl) 2","Tamlamalar","Zarf (Belirteç)","Edat (İlgeç)","Bağlaç - Ünlem",
+"Kip ve Çekim","Fiilde Yapı (Ek Fiil)","Fiilimsiler","Fiilde Çatı","Söz Grupları",
+"Cümlenin Ögeleri 1","Cümlenin Ögeleri 2","Cümlenin Ögeleri 3",
+"Cümle Türleri 1 (Yüklemin Yerine - Türüne - Anlamına Göre)","Cümle Türleri 2 (Yapılarına Göre)",
+"Anlatım Bozuklukları","Sözcükte Anlam","Cümlede Anlam",
+"Paragrafta Anlatım Biçimleri","Paragrafta Anlam","Paragrafta Yapı",
+"Çoklu - Aşamalı - Öncüllü - Röportajlı Paragraf","Yeni Nesil Yorumlama"
+]},
+{ ders:"Matematik", kaynak:"Eyüp Boncuk", konular:[
+"Temel Kavramlar: Sayı Kümeleri","Temel Kavramlar: Özdeşlikler 1","Temel Kavramlar: Özdeşlikler 2",
+"Temel Kavramlar Bire Bir ÖSYM Soruları","Temel Kavramlar Beceri Temelli Sorular",
+"Tek Çift Sayılar","Pozitif Negatif Sayılar","Tek Çift Pozitif Negatif Sayılar Beceri Temelli Sorular",
+"Ardışık Sayılar","Ardışık Sayılar Bire Bir ÖSYM Soruları","Ardışık Sayılar Beceri Temelli Sorular",
+"Faktöriyel","Faktöriyel Beceri Temelli Sorular",
+"Asal Sayılar","Asal Sayılar Beceri Temelli Sorular",
+"Sayı Basamakları","Sayı Basamakları Bire Bir ÖSYM Soruları","Sayı Basamakları Beceri Temelli Sorular",
+"Bölme","Bölme Bölünebilme","Bölünebilme Kuralları","Bölme Bölünebilme Bire Bir ÖSYM Soruları","Bölme Bölünebilme Beceri Temelli Sorular",
+"Asal Çarpanlara Ayırma","Asal Çarpanlara Ayırma Bire Bir ÖSYM Soruları","Asal Çarpanlara Ayırma Beceri Temelli Sorular",
+"EBOB EKOK","EBOB EKOK Problemleri","EBOB EKOK Birebir ÖSYM","EBOB EKOK Beceri Temelli Sorular",
+"Periyodik Problemler","Periyodik Problemler Bire Bir ÖSYM Soruları","Periyodik Problemler Beceri Temelli Sorular",
+"Rasyonel Sayılar","Ondalıklı Sayılar","Rasyonel Sayılar Bire Bir ÖSYM Soruları","Rasyonel Sayılar Beceri Temelli Sorular",
+"Birinci Dereceden Denklemler","Birinci Dereceden Denklemler Bire Bir ÖSYM Soruları","Birinci Dereceden Denklemler Beceri Temelli Sorular",
+"Basit Eşitsizlikler 1","Basit Eşitsizlikler 2","Basit Eşitsizlikler Bire Bir ÖSYM Soruları","Basit Eşitsizlikler Beceri Temelli Sorular",
+"Mutlak Değer","Mutlak Değer Denklemler","Mutlak Değer Eşitsizlikler","Mutlak Değer Bire Bir ÖSYM Soruları","Mutlak Değer Beceri Temelli Sorular",
+"Üslü Sayılar 1","Üslü Sayılar 2","Üslü Denklemler","Üslü Eşitsizlikler","Üslü Sayılar Bire Bir ÖSYM Soruları","Üslü Sayılar Beceri Temelli Sorular",
+"Köklü Sayılar 1","Köklü Sayılar 2","Köklü Sayılar Bire Bir ÖSYM","Köklü Sayılar Beceri Temelli Sorular",
+"Çarpanlara Ayırma 1","Çarpanlara Ayırma 2","Çarpanlara Ayırma 3","Çarpanlara Ayırma Bire Bir ÖSYM","Çarpanlara Ayırma Beceri Temelli Sorular",
+"Oran Orantı","Doğru Orantı","Ters Orantı","Ortalamalar","Oran Orantı Bire Bir ÖSYM","Oran Orantı Beceri Temelli Sorular",
+"Sayı Problemleri 1","Sayı Problemleri 2","Sayı Problemleri Bire Bir ÖSYM","Sayı Problemleri Beceri Temelli Sorular 1","Sayı Problemleri Beceri Temelli Sorular 2",
+"Kesir Problemleri","Kesir Problemleri Bire Bir ÖSYM","Kesir Problemleri Beceri Temelli Sorular",
+"Yaş Problemleri","Yaş Problemleri Bire Bir ÖSYM","Yaş Problemleri Beceri Temelli Sorular",
+"İşçi Problemleri","İşçi Problemleri Bire Bir ÖSYM","İşçi Problemleri Beceri Temelli Sorular",
+"Hız Problemleri 1","Hız Problemleri 2","Hız Problemleri Bire Bir ÖSYM 1","Hız Problemleri Bire Bir ÖSYM 2","Hız Problemleri Beceri Temelli Sorular 1","Hız Problemleri Beceri Temelli Sorular 2",
+"Yüzde Problemleri 1","Yüzde Problemleri 2","Yüzde Problemleri Bire Bir ÖSYM","Yüzde Problemleri Beceri Temelli Sorular 1","Yüzde Problemleri Beceri Temelli Sorular 2",
+"Karışım Problemleri","Karışım Problemleri Bire Bir ÖSYM","Karışım Problemleri Beceri Temelli Sorular",
+"Grafik Problemleri","Grafik Problemleri Bire Bir ÖSYM","Grafik Problemleri Beceri Temelli Sorular",
+"Veri","Veri Bire Bir ÖSYM","Veri Beceri Temelli Sorular",
+"Kümeler","Alt Kümeler","Kümelerde İşlemler","Kümelerde İşlem Öncelikleri","Kümeler Bire Bir ÖSYM","Kümeler Beceri Temelli Sorular",
+"Küme Problemleri","Kartezyen Çarpım","Kümeler Kartezyen Çarpım Beceri Temelli Sorular",
+"Fonksiyon Tanımı","Fonksiyon Tanım Kümesi Görüntü Kümesi","Fonksiyonda Değer Bulma 1","Fonksiyonda Değer Bulma 2",
+"Fonksiyonda Dört İşlem","Fonksiyon Çeşitleri 1","Fonksiyon Çeşitleri 2",
+"Fonksiyon 1 Bire Bir ÖSYM 1","Fonksiyon 1 Bire Bir ÖSYM 2","Fonksiyon 1 Beceri Temelli Sorular 1","Fonksiyon 1 Beceri Temelli Sorular 2",
+"Fonksiyonun Tersi 1","Fonksiyonun Tersi 2","Bileşke Fonksiyon","Fonksiyon Grafikleri",
+"Parçalı ve Mutlak Değer Fonksiyon","Fonksiyon 2 Bire Bir ÖSYM 1","Fonksiyon 2 Bire Bir ÖSYM 2","Fonksiyon 2 Beceri Temelli Sorular 1","Fonksiyon 2 Beceri Temelli Sorular 2",
+"Sayma Küme Fonksiyon İlişkisi 1","Sayma Küme Fonksiyon İlişkisi Birebir ÖSYM","Sayma Fonksiyon Küme Becerileri",
+"Sayma 1","Sayma 2","Permütasyon 1","Permütasyon 2","Tekrarlı Permütasyon",
+"Sayma Permütasyon Bire Bir ÖSYM","Sayma Permütasyon Beceri Temelli Sorular",
+"Kombinasyon 1","Kombinasyon 2","Kombinasyon 3","Geometri Şekillerde Kombinasyon",
+"Kombinasyon Bire Bir ÖSYM","Kombinasyon Beceri Temelli Sorular",
+"Binom","Binom Bire Bir ÖSYM","Binom Beceri Temelli Sorular",
+"Olasılık 1","Olasılık 2","Olasılık 3","Olasılık Bire Bir ÖSYM 1","Olasılık Bire Bir ÖSYM 2","Olasılık Beceri Temelli Sorular",
+"Mantık","Mantık ve - veya Bağlaçları","Mantık İse Ancak ve Ancak Bağlacı","Mantık Sembolleştirme",
+"Mantık Bire Bir ÖSYM","Mantık Beceri Temelli Sorular",
+"Polinom","Polinom Çeşitleri","Polinomda İşlemler","Polinom Sabit Terim Katsayılar Toplamı",
+"Polinomda Bölme ve Kalan Bulma","Polinomda Kalan Bulma","Polinom Bire Bir ÖSYM","Polinom Beceri Temelli Sorular 1","Polinom Beceri Temelli Sorular 2",
+"2. Dereceden Denklemler 1","2. Dereceden Denklemler 2","2. Dereceden Denklemler Kökler ve Katsayılar",
+"Kökleri Verilen Denklemi Yazma","2. Dereceden Denkleme Dönüştürülen Denklemler",
+"2. Dereceden Denklemler Bire Bir ÖSYM 1","2. Dereceden Denklemler Bire Bir ÖSYM 2",
+"2. Dereceden Denklemler Beceri Temelli Sorular 1","2. Dereceden Denklemler Beceri Temelli Sorular 2",
+"Karmaşık Sayılar 1","Karmaşık Sayılar 2","Karmaşık Sayılar Bire Bir ÖSYM",
+"Geometri: Üçgenler","Geometri: Çokgenler","Geometri: Çember-Daire","Analitik Geometri","Katı Cisimler"
+]},
+{ ders:"Tarih", kaynak:"39 Günde TYT Tarih Kampı", konular:[
+"Tarih ve Zaman - Konu Anlatımı","Tarih ve Zaman - Soru Çözümü",
+"İnsanlığın İlk Dönemleri - Konu Anlatımı","Orta Çağda Dünya - Konu Anlatımı","İlk Dönemler / Orta Çağ Soru Çözümü",
+"İlk ve Orta Çağlarda Türk Dünyası 1 - Konu Anlatımı","İlk ve Orta Çağlarda Türk Dünyası 1 - Soru Çözümü",
+"İlk ve Orta Çağlarda Türk Dünyası 2 - Konu Anlatımı","İlk ve Orta Çağlarda Türk Dünyası 2 - Soru Çözümü",
+"İslam Medeniyetinin Doğuşu 1 - Konu Anlatımı","İslam Medeniyetinin Doğuşu 2 - Konu Anlatımı","İslam Medeniyetinin Doğuşu - Soru Çözümü",
+"Türklerin İslamiyeti Kabulü 1 - Konu Anlatımı","Türklerin İslamiyeti Kabulü 1 - Soru Çözümü",
+"Türklerin İslamiyeti Kabulü 2 - Konu Anlatımı","Türklerin İslamiyeti Kabulü 2 - Soru Çözümü",
+"Yerleşme ve Devletleşme Sürecinde Selçuklu - Konu Anlatımı","Yerleşme ve Devletleşme Sürecinde Selçuklu - Soru Çözümü",
+"Beylikten Devlete Osmanlı Siyaseti - Konu Anlatımı","Beylikten Devlete Osmanlı Siyaseti - Soru Çözümü",
+"Devletleşme Sürecinde Savaşçılar - Konu Anlatımı","Devletleşme Sürecinde Savaşçılar - Soru Çözümü",
+"Beylikten Devlete Osmanlı Medeniyeti - Konu Anlatımı","Beylikten Devlete Osmanlı Medeniyeti - Soru Çözümü",
+"Dünya Gücü Osmanlı 1 - Konu Anlatımı","Dünya Gücü Osmanlı 1 - Soru Çözümü",
+"Dünya Gücü Osmanlı 2 - Konu Anlatımı","Dünya Gücü Osmanlı 2 - Soru Çözümü",
+"Sultan ve Osmanlı Merkez Teşkilatı - Konu Anlatımı","Sultan ve Osmanlı Merkez Teşkilatı - Soru Çözümü",
+"Klasik Çağda Osmanlı Toplum Düzeni - Konu Anlatımı","Klasik Çağda Osmanlı Toplum Düzeni - Soru Çözümü",
+"Değişen Dünya Dengeleri Osmanlı - Konu Anlatımı","Değişen Dünya Dengeleri Osmanlı - Soru Çözümü",
+"Değişim Çağında Avrupa ve Osmanlı 1 - Konu Anlatımı","Değişim Çağında Avrupa ve Osmanlı 2 - Konu Anlatımı","Değişim Çağında Avrupa ve Osmanlı - Soru Çözümü",
+"Devrimler Çağında Değişen Devlet Toplum - Konu Anlatımı","Devrimler Çağında Değişen Devlet Toplum - Soru Çözümü",
+"Uluslararası İlişkilerde Denge Stratejisi 1 - Konu Anlatımı","Uluslararası İlişkilerde Denge Stratejisi - Soru Çözümü 1",
+"Uluslararası İlişkilerde Denge Stratejisi 2 - Konu Anlatımı","Uluslararası İlişkilerde Denge Stratejisi - Soru Çözümü 2",
+"XIX-XX. Yüzyılda Değişen Sosyoekonomik Hayat - Konu Anlatımı","XIX-XX. Yüzyılda Değişen Sosyoekonomik Hayat - Soru Çözümü",
+"20.Yüzyıl Başlarında Osmanlı ve Dünya 1 - Konu Anlatımı","20.Yüzyıl Başlarında Osmanlı ve Dünya 1 - Soru Çözümü",
+"20.Yüzyıl Başlarında Osmanlı ve Dünya 2 - Konu Anlatımı","20.Yüzyıl Başlarında Osmanlı ve Dünya 2 - Soru Çözümü",
+"Milli Mücadele Dönemi 1 - Konu Anlatımı","Milli Mücadele Dönemi 1 - Soru Çözümü",
+"Milli Mücadele Dönemi 2 - Konu Anlatımı","Milli Mücadele Dönemi 2 - Soru Çözümü",
+"Milli Mücadele Dönemi 3 - Konu Anlatımı","Milli Mücadele Dönemi 3 - Soru Çözümü",
+"Milli Mücadele Dönemi 4 - Konu Anlatımı","Milli Mücadele Dönemi - Soru Çözümü",
+"Milli Mücadele Dönemi 5 - Konu Anlatımı","Milli Mücadele Dönemi 5 - Soru Çözümü",
+"Milli Mücadele Dönemi 6 - Konu Anlatımı","Milli Mücadele Dönemi 6 - Soru Çözümü",
+"Atatürkçülük ve Türk İnkılabı 1 - Konu Anlatımı","Atatürkçülük ve Türk İnkılabı 1 - Soru Çözümü",
+"Atatürkçülük ve Türk İnkılabı - Konu Anlatımı","Atatürkçülük ve Türk İnkılabı 2 - Soru Çözümü",
+"Atatürkçülük ve Türk İnkılabı 3 - Konu Anlatımı","Atatürkçülük ve Türk İnkılabı 3 - Soru Çözümü",
+"İki Savaş Arasındaki Dönemde Türkiye ve Dünya - Konu Anlatımı","İki Savaş Arasındaki Dönemde Türkiye ve Dünya - Soru Çözümü",
+"İki Savaş Arasındaki Dönemde Türkiye ve Dünya 2 - Konu Anlatımı","İki Savaş Arasındaki Dönemde Türkiye ve Dünya 2 - Soru Çözümü",
+"İki Küresel Savaş Arasında Türkiye ve Dünya - Konu Anlatımı",
+"II. Dünya Savaşı Sürecinde ve Sonrasında Türkiye ve Dünya - Konu Anlatımı","II. Dünya Savaşı Sürecinde ve Sonrasında Türkiye ve Dünya - Soru Çözümü",
+"TYT Tarih Son Full Tekrar Soru Çözümü"
+]},
+{ ders:"Coğrafya", kaynak:"39 Günde TYT Coğrafya Kampı", konular:[
+"Doğa ve İnsan - Coğrafyanın Bölümleri Konu Anlatımı","Doğa ve İnsan - Coğrafyanın Bölümleri Soru Çözümü",
+"Coğrafyanın Tarihi Gelişimi Konu Anlatımı","Coğrafyanın Tarihi Gelişimi Soru Çözümü",
+"Atmosferin Katmanları ve Özellikleri Konu Anlatımı","Atmosferin Katmanları ve Özellikleri Soru Çözümü",
+"Sıcaklık Konu Anlatımı","Sıcaklık Soru Çözümü",
+"Basınç ve Rüzgarlar Konu Anlatımı","Basınç ve Rüzgarlar Soru Çözümü",
+"Nem ve Yağış Konu Anlatımı","Nem ve Yağış Soru Çözümü",
+"Büyük İklim Tipleri Konu Anlatımı","Büyük İklim Tipleri Soru Çözümü",
+"Türkiye İklimi Konu Anlatımı","Türkiye İklimi Soru Çözümü",
+"Dünya'nın Tektonik Oluşumu Konu Anlatımı","Dünya'nın Tektonik Oluşumu Soru Çözümü",
+"İç Kuvvetler Konu Anlatımı","İç Kuvvetler Soru Çözümü",
+"Kayaçlar Konu Anlatımı","Kayaçlar Soru Çözümü",
+"Türkiye'de İç Kuvvetler Konu Anlatımı","Türkiye'de İç Kuvvetler Soru Çözümü",
+"Dış Kuvvetler: Akarsular Konu+Soru","Dış Kuvvetler: Karstik Şekiller Konu+Soru",
+"Rüzgar ve Buzul Konu+Soru","Dalga ve Akıntılar - Kıyı Tipleri",
+"Türkiye'de Dış Kuvvetler Konu+Soru",
+"Türkiye'nin Yer Şekilleri Konu Anlatımı","Türkiye'nin Yer Şekilleri Soru Çözümü",
+"Dünya'da Sular Konu+Soru","Türkiye'de Sular Konu+Soru",
+"Dünya'da Topraklar Konu+Soru","Türkiye'de Topraklar Konu+Soru",
+"Dünya'da Bitkiler Konu+Soru","Türkiye'de Bitkiler Konu+Soru",
+"Dünya'da Yerleşmeler Konu+Soru","Türkiye'de Yerleşmeler Konu+Soru",
+"Nüfusun Önemi ve Özellikleri Konu+Soru","Dünya'da Nüfusun Dağılışı Konu+Soru",
+"Nüfus Piramitleri Konu+Soru","Türkiye'de Nüfus Konu Anlatımı","Türkiye'de Nüfus Soru Çözümü",
+"Dünya ve Türkiye'de Göçler Konu Anlatımı","Dünya ve Türkiye'de Göçler Soru Çözümü",
+"Ekonomik Faaliyetler Konu+Soru","Bölge ve Bölge Türleri Konu+Soru",
+"Ulaşım Konu+Soru","Çevre ve Toplum Konu+Soru",
+"Afetler Konu Anlatımı","Afetler Soru Çözümü",
+"Dünya'nın Şekli ve Hareketleri Konu Anlatımı","Dünya'nın Şekli ve Hareketleri Soru Çözümü",
+"Coğrafi Konum Konu Anlatımı","Coğrafi Konum Soru Çözümü",
+"Harita Bilgisi Konu Anlatımı","Harita Bilgisi Soru Çözümü"
+]},
+{ ders:"Dünya Harita Bilgisi", kaynak:"Coğrafya Ek Çalışma", konular:[
+"7 Günde Dünya Harita Bilgisi Çalışması Kamp",
+"Coğrafya Türkiye Haritası Zemin Hazırla",
+"Dünya Dağlar ve Çöller Harita Bilgisi Çalışması",
+"Dünya İklimler ve Nüfus Harita Bilgisi Çalışması",
+"Dünya Deprem ve Afetler Harita Bilgisi Çalışması",
+"Dünya Kanallar ve Boğazlar - Okyanus Akıntıları Harita Bilgisi",
+"Dünya Akarsular - Denizler ve Göller Harita Bilgisi Çalışması",
+"Dünya İlk Uygarlıklar - Bitkiler Harita Bilgisi Çalışması",
+"Dünya Ülkeler ve Diğerleri",
+"80 Soruda Dünya Harita Bilgisi - TYT Coğrafya Full Tekrar Soru Çözümü",
+"AYT Dünya Harita Bilgisi Tekrarı"
+]},
+{ ders:"Felsefe", kaynak:"20 Günde TYT Felsefe Kampı", konular:[
+"Felsefeyle Tanışma 1","Felsefeyle Tanışma 2","Felsefeyle Tanışma 3",
+"Felsefeyle Tanışma Test 1-6 (Soru Çözümü Seti)",
+"Bilgi Felsefesi (Epistemoloji) 1","Bilgi Felsefesi (Epistemoloji) 2","Bilgi Felsefesi (Epistemoloji) 3","Bilgi Felsefesi (Epistemoloji) 4",
+"Bilgi Felsefesi Test Seti (9-20)",
+"Varlık Felsefesi 1","Varlık Felsefesi 2","Varlık Felsefesi 3","Varlık Felsefesi 4",
+"Varlık Felsefesi Test Seti (21-29)",
+"Ahlak Felsefesi 1","Ahlak Felsefesi 2","Ahlak Felsefesi 3",
+"Ahlak Felsefesi Test Seti (30-38)",
+"Sanat Felsefesi 1","Sanat Felsefesi 2",
+"Sanat Felsefesi Test Seti (39-48)",
+"Din Felsefesi 1","Din Felsefesi 2",
+"Din Felsefesi Test Seti (49-58)",
+"Siyaset Felsefesi 1","Siyaset Felsefesi 2",
+"Siyaset Felsefesi Test Seti (59-68)",
+"Bilim Felsefesi 1","Bilim Felsefesi 2",
+"Bilim Felsefesi Test Seti (69-78)",
+"Felsefe Tarihi 1","Felsefe Tarihi 2",
+"Felsefe Tarihi Test Seti (79-88)"
+]},
+{ ders:"Din Kültürü", kaynak:"Çetin ZENCİR", konular:[
+"İnanç 1","İnanç 2","İnanç 3",
+"Temizlik ve İbadet 1","Temizlik ve İbadet 2",
+"Yaşayan Dünya Dinleri - Hristiyanlık","Yaşayan Dünya Dinleri - Yahudilik","Yaşayan Dünya Dinleri - Hint Dinleri",
+"Kur'an-ı Kerim'in Tarihi ve Bazı Önemli Kavramlar 1","Kur'an-ı Kerim'in Tarihi ve Bazı Önemli Kavramlar 2",
+"Kur'an'a Göre Hz. Muhammed 1","Kur'an'a Göre Hz. Muhammed 2",
+"İslam Düşüncesi ve Yorumu 1","İslam Düşüncesi ve Yorumu 2","İslam Düşüncesi ve Yorumu 3"
+]},
+{ ders:"Fizik", kaynak:"55 Günde TYT Fizik Kampı", konular:[
+"Fizik Bilimine Giriş 1: Fiziğin Alt Dalları","Fizik Bilimine Giriş 2: Fiziksel Büyüklükler","Fizik Bilimine Giriş Soru Çözümü",
+"Madde ve Özellikleri 1: Kütle ve Hacim Kavramları","Madde ve Özellikleri 2: Özkütle","Madde ve Özellikleri 3: Karışımların Özkütlesi","Madde ve Özellikleri Soru Çözümü 1",
+"Madde ve Özellikleri 4: Dayanıklılık","Madde ve Özellikleri 5: Adezyon ve Kohezyon","Madde ve Özellikleri Soru Çözümü 2",
+"Hareket 1: Temel Kavramlar","Hareket 2: Düzgün Doğrusal Hareket","Hareket 3: İvme","Hareket Soru Çözümü 1","Hareket Soru Çözümü 2",
+"Kuvvet 1: Temel Kuvvetler ve Bileşke Kuvvet","Kuvvet 2: Newton'ın Hareket Yasaları","Kuvvet 3: Newton'ın Hareket Yasaları","Kuvvet 4: Sürtünme Kuvveti","Kuvvet Soru Çözümü 1","Kuvvet Soru Çözümü 2",
+"İş, Güç, Enerji 1: İş Kavramı","İş, Güç, Enerji 2: Mekanik Enerji","İş, Güç, Enerji 3: Enerjinin Korunumu ve Güç","İş, Güç, Enerji 4: Verim ve Enerji Kaynakları","İş Güç Enerji Soru Çözümü 1","İş Güç Enerji Soru Çözümü 2",
+"Isı ve Sıcaklık 1: İç Enerji, Sıcaklık, Isı","Isı ve Sıcaklık 2: Sıcaklık Ölçekleri","Isı ve Sıcaklık 3: Öz Isı ve Isı Sığası","Isı ve Sıcaklık 4: Hal Değişimi","Isı ve Sıcaklık 5: Isıl Denge","Isı ve Sıcaklık 6: Enerji İletim Yolları ve Hızı","Isı ve Sıcaklık Soru Çözümü 1","Isı ve Sıcaklık Soru Çözümü 2",
+"Genleşme 1","Genleşme 2","Genleşme Soru Çözümü",
+"Elektrostatik 1: Elektrik Yükleri","Elektrostatik 2: Elektriklenme Çeşitleri","Elektrostatik 3: Elektroskop","Elektrostatik 4: İletken ve Yalıtkanlar, Topraklama","Elektrostatik 5: Coulomb Kuvveti","Elektrostatik 6: Elektrik Alan","Elektrostatik Soru Çözümü 1","Elektrostatik Soru Çözümü 2",
+"Elektrik Akımı 1: Elektrik Akımı ve Potansiyel Fark","Elektrik Akımı 2: Direnç",
+"Elektrik Devreleri 1: Ohm Yasası","Elektrik Devreleri 2: Dirençlerin Bağlanması","Elektrik Devreleri 3: Üreteçlerin Bağlanması","Elektrik Devreleri Soru Çözümü 1","Elektrik Devreleri Soru Çözümü 2",
+"Elektrik Devreleri 4: Elektriksel Güç ve Lambalar","Elektriksel Güç ve Lambalar Soru Çözümü 1","Elektriksel Güç ve Lambalar Soru Çözümü 2",
+"Manyetizma 1: Mıknatıs ve Manyetik Alan","Manyetizma 2: Akım ve Manyetik Alan","Manyetizma 3: Elektromıknatıs","Manyetizma 4: Dünya'nın Manyetik Alanı","Manyetizma Soru Çözümü 1","Manyetizma Soru Çözümü 2",
+"Basınç 1: Katı Basıncı","Basınç Soru Çözümü 1: Katı Basıncı","Basınç 2: Sıvı Basıncı 1","Basınç 3: Sıvı Basıncı 2","Basınç 4: Sıvı Basıncı 3","Basınç 5: Açık Hava Basıncı","Basınç 6: Kapalı Kaplarda Gaz Basıncı","Basınç 7: Basınç Ölçen Aletler ve Hal Değişimine Etki","Basınç 8: Akışkanların Basıncı",
+"Durgun Sıvı ve Akışkan Basıncı Soru Çözümü 1","Durgun Sıvı ve Akışkan Basıncı Soru Çözümü 2",
+"Gaz Basıncı Soru Çözümü 1","Gaz Basıncı Soru Çözümü 2",
+"Kaldırma Kuvveti 1","Kaldırma Kuvveti 2","Kaldırma Kuvveti Soru Çözümü 1","Kaldırma Kuvveti Soru Çözümü 2",
+"Aydınlanma 1: Işık Şiddeti ve Işık Akısı","Aydınlanma 2: Aydınlanma Şiddeti","Aydınlanma Soru Çözümü",
+"Gölge 1","Gölge 2","Gölge Soru Çözümü",
+"Yansıma ve Yansıma Kanunları","Düzlem Ayna 1","Düzlem Ayna 2: Görüş Alanı","Düzlem Ayna Soru Çözümü",
+"Küresel Aynalar 1: Çukur Aynada Özel Işınlar","Küresel Aynalar 2: Tümsek Aynada Özel Işınlar","Küresel Aynalar 3: Çukur Aynada Görüntü","Küresel Aynalar 4: Tümsek Aynada Görüntü","Küresel Aynalar Soru Çözümü",
+"Işığın Kırılması: Kırılma İndisi, Snell Yasası","Işığın Kırılması: Sınır Açısı ve Tam Yansıma","Işığın Kırılması: Küresel Yüzeylerden Geçiş ve Görünür Uzaklık","Işığın Kırılması Soru Çözümü",
+"Mercekler: Odak Uzaklığının Bağlı Olduğu Faktörler","Mercekler: İnce ve Kalın Kenarlı Merceklerde Özel Işınlar","Mercekler: İnce ve Kalın Kenarlı Merceklerde Görüntü","Mercekler Soru Çözümü",
+"Prizmalar","Renkler","Prizma ve Renkler Soru Çözümü",
+"Dalgalar 1: Temel Kavramlar","Dalgalar 2: Dalgaların Sınıflandırılması",
+"Yay Dalgaları 1: Atmaların İlerlemesi ve Hızı","Yay Dalgaları 2: Atmaların Yansıması ve Girişimi","Yay Dalgaları 3: Atmaların Farklı Ortama Geçişi","Yay Dalgaları Soru Çözümü",
+"Su Dalgası 1: Doğrusal ve Dairesel Su Dalgaları","Su Dalgası 2: Doğrusal Su Dalgalarında Yansıma","Su Dalgası 3: Dairesel Su Dalgalarında Yansıma","Su Dalgası 4: Su Dalgalarının Hızı ve Kırılması","Su Dalgaları Soru Çözümü",
+"Ses ve Deprem Dalgaları","Ses ve Deprem Dalgaları Soru Çözümü"
+]},
+{ ders:"Kimya", kaynak:"Görkem ŞAHİN", konular:[
+"Simyadan Kimyaya","Kimyanın ve Kimyacıların Başlıca Çalışma Alanları","Kimyanın Sembolik Dili",
+"Kimya Uygulamalarında İş Sağlığı ve Güvenliği 1","Kimya Uygulamalarında İş Sağlığı ve Güvenliği 2",
+"Atom Modelleri","Atomun Yapısı","Periyodik Sistem","Elementlerin Sınıflandırılması",
+"Periyodik Özellikler 1","Periyodik Özellikler 2",
+"Kimyasal Türler Arası Etkileşimler","Güçlü Etkileşimler (İyonik Bağ)",
+"İyonik Bağlı Bileşiklerin Sistematik Adlandırılması","Kovalent Bağ",
+"Kovalent Bağlı Bileşiklerin İsimlendirilmesi ve Metalik Bağ","Zayıf Etkileşimler",
+"Fiziksel ve Kimyasal Değişimler","Maddenin Halleri","Katılar","Sıvılar","Gazlar",
+"Doğa ve Kimya","Kimyanın Temel Kanunları","Sabit Oranlar Kanunu","Katlı Oranlar Kanunu",
+"Mol Kavramı 1","Mol Kavramı 2","Mol Kavramı Soru Çözümü",
+"Kimyasal Tepkime Türleri","Kimyasal Tepkimelerde Hesaplamalar 1","Kimyasal Tepkimelerde Hesaplamalar 2","Kimyasal Tepkimelerde Hesaplamalar 3","Kimyasal Hesaplamalar Soru Çözümü",
+"Karışımların Sınıflandırılması 1","Karışımların Sınıflandırılması 2","Çözünme Süreci",
+"Çözeltilerde Derişim","Karışımlar - ÖSYM Ne Sordu?","Koligatif Özellikler",
+"Ayırma ve Saflaştırma Teknikleri","Asitler ve Bazlar",
+"Asitlerin ve Bazların Tepkimeleri 1","Asitlerin ve Bazların Tepkimeleri 2",
+"Hayatımızdaki Asitler, Bazlar ve Tuzlar","Asitler, Bazlar ve Tuzlar - Ünite Değerlendirme",
+"Kimya Her Yerde"
+]},
+{ ders:"Biyoloji", kaynak:"39 Günde TYT Biyoloji Kampı", konular:[
+"Canlıların Genel Özellikleri - Konu Anlatımı","Canlıların Genel Özellikleri - Soru Çözümü",
+"İnorganik Bileşikler - Konu Anlatımı","İnorganik Bileşikler - Soru Çözümü",
+"Karbohidratlar - Konu Anlatımı","Karbohidratlar - Soru Çözümü",
+"Lipitler (Yağlar) - Konu Anlatımı","Lipitler (Yağlar) - Soru Çözümü",
+"Proteinler - Konu Anlatımı","Proteinler - Soru Çözümü",
+"Hormonlar - Konu Anlatımı","Vitaminler - Konu Anlatımı",
+"Enzimler - Konu Anlatımı","Enzimleri Etkileyen Faktörler - Konu Anlatımı","Enzimler-Hormonlar-Vitaminler Soru Çözümü",
+"Nükleik Asitler - Konu Anlatımı","DNA Konu Anlatımı","DNA Soru Çözümü","RNA","ATP Metabolizma","RNA-ATP Soru Çözümü",
+"Canlıların Temel Bileşenleri Full Tekrar",
+"Hücre - Hücre Zarı Konu Anlatımı","Hücre - Hücre Zarı Soru Çözümü",
+"Pasif Taşıma Konu Anlatımı","Aktif Taşıma - Endositoz - Ekzositoz Konu Anlatımı","Madde Geçişleri Soru Çözümü",
+"Ribozom - Sentrozom Konu Anlatımı",
+"Tek Zarlı Organeller Konu Anlatımı","Tek Zarlı Organeller Soru Çözümü",
+"Çift Zarlı Organeller Konu Anlatımı",
+"Çekirdek - Hücre İskeleti Konu Anlatımı","Çekirdek - Hücre İskeleti Soru Çözümü",
+"Bilimsel Yöntem Konu Anlatımı","Bilimsel Yöntem - Organeller Soru Çözümü",
+"Hücre Genel Tekrar",
+"Ekoloji İle İlgili Kavramlar","Ekosistemi Oluşturan Bileşenler",
+"Besin Zinciri - Besin Piramidi Konu Anlatımı","Besin Zinciri - Besin Piramidi Soru Çözümü",
+"Madde Döngüleri Konu Anlatımı","Güncel Çevre Sorunları Konu Anlatımı","Madde Döngüleri ve Güncel Çevre Sorunları",
+"Ekosistem Ekolojisi Genel Tekrar - Full Tekrar",
+"İkili Adlandırma Konu Anlatımı","İkili Adlandırma Soru Çözümü",
+"Bakteriler Alemi Konu Anlatımı","Arkeler Alemi Konu Anlatımı ve Soru Çözümü",
+"Protista - Bitki - Mantar Alemi","Protista - Bitki - Mantar Alemi Soru Çözümü",
+"Omurgasız Hayvanlar Konu Anlatımı","Omurgalı Hayvanlar ve Virüsler Konu Anlatımı","Omurgalı Hayvanlar ve Virüsler Soru Çözümü",
+"Sınıflandırma Genel Tekrar",
+"Bölünme İle İlgili Kavramlar Konu Anlatımı",
+"Mitoz Konu Anlatımı","Mitoz Soru Çözümü",
+"Mayoz Konu Anlatımı","Eşeysiz Üreme Konu Anlatımı","Mayoz Soru Çözümü",
+"Eşeyli Üreme Konu Anlatımı","Eşeyli Üreme Soru Çözümü",
+"Hücre Bölünmeleri Full Tekrar",
+"Kalıtımla İlgili Kavramlar - Gamet Çeşiti Bulma","Çaprazlamalar","Çaprazlamalar Soru Çözümü",
+"Eş Baskınlık - Çok Alellik Konu Anlatımı",
+"Kan Grupları Konu Anlatımı","Kan Grupları Soru Çözümü",
+"Eşeye Bağlı Kalıtım","Otozomal Çekinik - Baskın","X ve Y'ye Bağlı Kalıtım",
+"Soy Ağaçları Soru Çözümü","Kalıtım Genel Tekrar",
+"MSÜ 2026 Biyoloji'de Ne Sorarlar? MSÜ Biyoloji Analizi",
+"MSÜ-TYT Biyoloji Son Full Tekrar",
+"114 Soruyla TYT Biyoloji Deneme Çözümü | Son Full Tekrar"
+]}
+],
+AYT: [
+{ ders:"Matematik", kaynak:"Eyüp Boncuk", konular:[
+"Polinomlar 1","Polinomlar 2","Polinomlar 3","Polinomlar 4","Polinomlar Bire Bir ÖSYM","Polinomlar Beceri Temelli Sorular 1","Polinomlar Beceri Temelli Sorular 2",
+"Polinomlarda Bölme 1","Polinomlarda Bölme 2","Polinomlarda Bölme 3","Polinomlarda Bölme 4","Polinomlarda Bölme Bire Bir ÖSYM","Polinomlarda Bölme Beceri Temelli Sorular 1","Polinomlarda Bölme Beceri Temelli Sorular 2",
+"İkinci Dereceden Denklemler 1","İkinci Dereceden Denklemler 2","İkinci Dereceden Denklemler 3","İkinci Dereceden Denklemler 4","İkinci Dereceden Denklemler 5","İkinci Dereceden Denklemler 6",
+"İkinci Dereceden Denklemler Bire Bir ÖSYM","İkinci Dereceden Denklemler Beceri Temelli Sorular 1","İkinci Dereceden Denklemler Beceri Temelli Sorular 2","İkinci Dereceden Denklemler Beceri Temelli Sorular 3",
+"Parabol 1","Parabol 2","Parabol 3","Parabol 4","Parabol 5","Parabol 6","Parabol Bire Bir ÖSYM",
+"Parabol Beceri Temelli Sorular 1","Parabol Beceri Temelli Sorular 2","Parabol Beceri Temelli Sorular 3","Parabol Beceri Temelli Sorular 4",
+"İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 1","İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 2","İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 3","İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 4","İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 5","İkinci Dereceden Bir Bilinmeyenli Eşitsizlikler 6",
+"İkinci Dereceden Eşitsizlikler Bire Bir ÖSYM","İkinci Dereceden Eşitsizlikler Beceri Temelli Sorular 1","İkinci Dereceden Eşitsizlikler Beceri Temelli Sorular 2","İkinci Dereceden Eşitsizlikler Beceri Temelli Sorular 3",
+"Fonksiyon Uygulamaları","Fonksiyon Uygulamaları: Artan Azalan Fonksiyon","Fonksiyon Uygulamaları: Öteleme","Fonksiyon Uygulamaları: Simetri",
+"Fonksiyon Uygulamaları Bire Bir ÖSYM","Fonksiyon Uygulamaları Beceri Temelli Sorular 1","Fonksiyon Uygulamaları Beceri Temelli Sorular 2",
+"Trigonometri: Yönlü Açı","Trigonometri: Birim Çember","Trigonometrik Özdeşlikler","Trigonometrik Fonksiyonların İşaretleri",
+"Trigonometri: Dik Üçgende Trigonometrik Oranlar","Trigonometri Bire Bir ÖSYM","Trigonometri Beceri Temelli Sorular 1","Trigonometri Beceri Temelli Sorular 2",
+"Trigonometri: İndirgeme","Trigonometrik İfadelerde Sıralama","Trigonometri: Cos ve Sin Teoremleri","Trigonometri: Periyot Bulma ve Grafik",
+"Trigonometri: Ters Trigonometrik Fonksiyonlar","Trigonometri Bire Bir ÖSYM 2","Trigonometri Beceri Temelli Sorular 3","Trigonometri Beceri Temelli Sorular 4",
+"Trigonometri: Toplam Fark Formülleri","Trigonometri: Yarım Açı Formülleri","Trigonometrik Denklemler",
+"Trigonometri Bire Bir ÖSYM 3","Trigonometri Beceri Temelli Sorular 5","Trigonometri Beceri Temelli Sorular 6",
+"Logaritma - Üstel Fonksiyon 1","Logaritma - Üstel Fonksiyon 2","Logaritma Fonksiyonunun Özellikleri",
+"Logaritma Özellikleri 1","Logaritma Grafikleri","Logaritma Özellikleri 2","Logaritma Özellikleri 3",
+"Logaritmik Denklemler","Logaritmik Eşitsizlikler","Logaritma Bire Bir ÖSYM","Logaritma Beceri Temelli Sorular 1","Logaritma Beceri Temelli Sorular 2",
+"Diziler","Dizi Özellikleri","Aritmetik Dizi","Geometrik Dizi","Diziler Bire Bir ÖSYM","Diziler Beceri Temelli Sorular 1","Diziler Beceri Temelli Sorular 2",
+"Limit Tanımı 1","Limit Tanımı 2","Limit Özellikleri","Parçalı Fonksiyonların Limiti","Mutlak Değer Fonksiyonunun Limiti",
+"Limitte Belirsizlik","Limitte Süreklilik","Limit Bire Bir ÖSYM 1","Limit Bire Bir ÖSYM 2","Limit Beceri Temelli Sorular 1","Limit Beceri Temelli Sorular 2",
+"Türev Tanımı 1","Türev Tanımı 2","Türev Alma Kuralları 1","Türev Alma Kuralları 2","Türev Alma Kuralları 3","Türev Alma Kuralları 4",
+"Türev: Parametrik Türev","Türev Bire Bir ÖSYM","Türev Beceri Temelli Sorular 1","Türev Beceri Temelli Sorular 2",
+"Türev: Türevli Olma Şartı","Türev: Parçalı Fonksiyonların Türevi","Türev: Ortalama Değer Teoremi",
+"Türevin Fiziksel Yorumu","Türevin Geometrik Yorumu 1","Türevin Geometrik Yorumu 2","Türevin Geometrik Yorumu 3",
+"Türev: Artan Azalanlık","Türev Bire Bir ÖSYM 2","Türev Bire Bir ÖSYM 3","Türev Beceri Temelli Sorular 3",
+"Türev: Ekstremum Noktaları 1","Türev: Ekstremum Noktaları 2","Türev: Maksimum Minimum Problemleri 1","Türev: Maksimum Minimum Problemleri 2",
+"Türev: Polinom Grafikleri 1","Türev: Polinom Grafikleri 2","Türev Bire Bir ÖSYM 4","Türev Beceri Temelli Sorular 4","Türev Beceri Temelli Sorular 5","Türev Beceri Temelli Sorular 6",
+"İntegral: Diferansiyel Kavramı","İntegral Özellikleri","İntegral Alma Özellikleri","İntegral: Değişken Değiştirme",
+"İntegral Bire Bir ÖSYM","İntegral Beceri Temelli Sorular 1","İntegral Beceri Temelli Sorular 2",
+"İntegral: Belirli İntegral 1","İntegral: Belirli İntegral 2","İntegral: Belirli İntegral 3","İntegral: Riemann Toplamı",
+"İntegralde Alan 1","İntegralde Alan 2","İntegralde Alan 3","İntegralde Alan 4",
+"İntegral Bire Bir ÖSYM 2","İntegral Bire Bir ÖSYM 3","İntegral Bire Bir ÖSYM 4",
+"İntegral Beceri Temelli Sorular 3","İntegral Beceri Temelli Sorular 4","İntegral Beceri Temelli Sorular 5","İntegral Beceri Temelli Sorular 6",
+"Koşullu Olasılık 1","Koşullu Olasılık 2","Koşullu Olasılık Bire Bir ÖSYM","Koşullu Olasılık Beceri Temelli Sorular"
+]},
+{ ders:"Fizik", kaynak:"88 Günde AYT Fizik Kampı", konular:[
+"Vektörler 1: Vektörlerin Genel Özellikleri","Vektörler 2: Vektörlerin Bileşkesi","Vektörler 3: Vektörlerin Bileşenlerine Ayrılması","Vektörler Soru Çözümü",
+"Bağıl Hareket 1","Bağıl Hareket 2: Bir Boyutta Nehirde Hareket","Bağıl Hareket 3: İki Boyutta Nehirde Hareket","Bağıl Hareket Soru Çözümü",
+"Newton'ın Hareket Yasaları 1: Serbest Cisim Diyagramı","Newton'ın Hareket Yasaları 2: Sürtünme Kuvveti",
+"Net Kuvvet Etkisinde Cisimler","Üst Üste Cisimler ve Makaralı Sistemler","Eğik Düzlemde İvmeli Hareket","Eylemsizlik ve Asansör Soruları",
+"Newton'ın Hareket Yasaları Soru Çözümü 1","Newton'ın Hareket Yasaları Soru Çözümü 2","Newton'ın Hareket Yasaları Soru Çözümü 3","Newton'ın Hareket Yasaları Soru Çözümü 4",
+"Bir Boyutta Sabit İvmeli Hareket 1: Grafik Çizimi","Bir Boyutta Sabit İvmeli Hareket 2: Grafik Yorumlama",
+"Bir Boyutta Sabit İvmeli Hareket 3: Örnek Sorular","Bir Boyutta Sabit İvmeli Hareket 4: Örnek Sorular",
+"Sabit İvmeli Hareket Soru Çözümü 1","Sabit İvmeli Hareket Soru Çözümü 2",
+"Atışlar: Serbest Düşme","Atışlar: Limit Hız","Atışlar: Yukarıdan Aşağıya Düşey Atış","Atışlar: Aşağıdan Yukarıya Düşey Atış 1","Atışlar: Aşağıdan Yukarıya Düşey Atış 2",
+"Bir Boyutta Atış Hareketi Soru Çözümü 1","Bir Boyutta Atış Hareketi Soru Çözümü 2","Atışlar: Yatay Atış","Atışlar: Eğik Atış 1","Atışlar: Eğik Atış 2",
+"İki Boyutta Atış Hareketi Soru Çözümü 1","İki Boyutta Atış Hareketi Soru Çözümü 2",
+"Enerji ve Hareket 1: İş ve Enerji","Enerji ve Hareket 2: Kinetik ve Yer Çekimi Potansiyel Enerji","Enerji ve Hareket 3: Esneklik Potansiyel Enerjisi",
+"Enerji ve Hareket 4: Mekanik Enerjinin Korunumu 1","Enerji ve Hareket 4: Mekanik Enerjinin Korunumu 2","Enerji ve Hareket 5: Sürtünmeli Yüzeylerde Mekanik Enerji",
+"Enerji ve Hareket Soru Çözümü 1","Enerji ve Hareket Soru Çözümü 2",
+"İtme ve Çizgisel Momentum İlişkisi","Kuvvet-Zaman ve Momentum-Zaman Grafikleri","Çizgisel Momentumun Korunumu",
+"Bir Boyutta Esnek Çarpışmalar","İki Boyutta Esnek Çarpışmalar","Bir Boyutta Esnek Olmayan Çarpışmalar","İki Boyutta Esnek Olmayan Çarpışmalar",
+"Patlama ve Fırlatma Soruları","İtme ve Momentum Soru Çözümü 1","İtme ve Momentum Soru Çözümü 2",
+"Tork 1","Tork 2: Örnek Sorular","Denge 1","Denge 2: Paralel Kuvvetlerin Dengesi","Denge 3: Kesişen Kuvvetlerin Dengesi",
+"Tork ve Denge Soru Çözümü 1","Tork ve Denge Soru Çözümü 2",
+"Kütle ve Ağırlık Merkezi 1","Kütle ve Ağırlık Merkezi 2","Kütle ve Ağırlık Merkezi 3","Kütle ve Ağırlık Merkezi Soru Çözümü",
+"Basit Makineler: Kuvvet Kazancı ve Verim","Basit Makineler: Kaldıraçlar","Basit Makineler: Sabit ve Hareketli Makaralar",
+"Basit Makineler: Palangalar","Basit Makineler: Eğik Düzlem ve Çıkrık","Basit Makineler: Dişli Çarklar ve Kasnaklar",
+"Basit Makineler: Dönerek Ötelenen Kasnaklar ve Vida","Basit Makineler Soru Çözümü",
+"Düzgün Çembersel Hareket: Temel Kavramlar","Merkezcil Kuvvet ve İvme 1","Merkezcil Kuvvet ve İvme 2",
+"Yatay Düzlemde Düzgün Çembersel Hareket","Düşey Düzlemde Düzgün Çembersel Hareket",
+"Konik Sarkaç ve Silindir İçinde Düzgün Çembersel Hareket","Yatay Viraj ve Eğimli Viraj",
+"Düzgün Çembersel Hareket Soru Çözümü",
+"Dönerek Öteleme Hareketi","Eylemsizlik Momenti","Dönme Kinetik Enerjisi","Açısal Momentum",
+"Açısal İvme - Tork İlişkisi","Açısal Momentumun Korunumu","Açısal Momentum Soru Çözümü",
+"Kütle Çekim Kuvveti","Kütle Çekim Potansiyel Enerjisi","Kepler Kanunları","Kütle Çekim Kuvveti Soru Çözümü",
+"Basit Harmonik Hareket Nasıl Yapılır?","BHH - Düzgün Çembersel Hareket İlişkisi","Kuvvet-Zaman ve Kuvvet-Konum İlişkisi",
+"İvme-Konum ve Hız-Konum İlişkisi","Yay Sarkacı","Basit Sarkaç","Basit Harmonik Hareket Soru Çözümü",
+"Dalga Mekaniği: Su Dalgalarında Kırınım","Dalga Mekaniği: Su Dalgalarında Girişim","Dalga Mekaniği: Çift Yarıkta Girişim",
+"Dalga Mekaniği: Girişim Desenine Etki Eden Faktörler","Dalga Mekaniği: Tek Yarıkta Kırınım","Dalga Mekaniği: Doppler Olayı",
+"Dalga Mekaniği Soru Çözümü",
+"Elektriksel Kuvvet (Coulomb Kuvveti)","Elektrik Alan 1","Elektrik Alan 2","Elektriksel Kuvvet ve Alan Soru Çözümü",
+"Elektriksel Potansiyel Enerji","Elektriksel Potansiyel","Elektriksel Potansiyel Fark ve İş","Elektriksel Potansiyel Soru Çözümü",
+"Düzgün Elektrik Alan","Yüklü Taneciklerin Düzgün Elektrik Alandaki Hareketi","Sığa Kavramı","Sığaçlar",
+"Düzgün Elektrik Alan ve Sığaçlar Soru Çözümü",
+"Üzerinden Akım Geçen Düz Telin Manyetik Alanı","Üzerinden Akım Geçen Halkanın Manyetik Alanı",
+"Üzerinden Akım Geçen Akım Makarasının (Bobinin) Manyetik Alanı","Manyetik Alan Soru Çözümü",
+"Üzerinden Akım Geçen Tele Etki Eden Manyetik Kuvvet","Tel Çerçeveye Etki Eden Manyetik Tork",
+"Yüklü Parçacıkların Manyetik Alandaki Hareketi","Manyetik Kuvvet Soru Çözümü",
+"Hareket Eden Telde İndüksiyon Elektromotor Kuvveti","Manyetik Akı","Faraday ve Lenz Yasaları",
+"Öz İndüksiyon Akımı","Lorentz Kuvveti ve Girdap Akımları","İndüksiyon Akımı Soru Çözümü",
+"Alternatif Akım Nasıl Oluşur?","Alternatif Akım - Doğru Akım Kıyaslaması",
+"AA Devrelerinde Direnç ve Bobinin Davranışı","AA Devrelerinde Sığacın Davranışı","Empedans ve Rezonans Kavramları",
+"Transformatörler","Alternatif Akım ve Transformatörler Soru Çözümü",
+"Elektromanyetik Dalgaların Oluşumu ve Ortak Özellikleri","Elektromanyetik Spektrum",
+"Siyah Cisim Işıması","Kesikli Enerji ve Planck Hipotezi","Siyah Cisim Işıması Soru Çözümü",
+"Dalton ve Thomson Atom Modelleri, Milikan Yağ Damlası Deneyi","Rutherford Atom Modeli",
+"Bohr Atom Modeli: Açısal Momentum, Yarıçap ve Enerji","Bohr Atom Modeli: Işıma","Bohr Atom Modeli: Atomun Uyarılma Yolları",
+"Modern Atom Teorisi","Atom Modelleri Soru Çözümü",
+"Büyük Patlama ve Evrenin Oluşumu","Temel Parçacıklar: Atom Altı Parçacıklar ve Standart Model",
+"Higgs Bozonu, Madde-Antimadde, Temel Kuvvetler","Büyük Patlama ve Evrenin Oluşumu Soru Çözümü",
+"Radyoaktivite: Neden Bazı Çekirdekler Kararsızdır?","Radyoaktivite: Alfa, Beta, Gama Işımaları",
+"Radyoaktivite: Nükleer Fisyon ve Füzyon Tepkimeleri","Radyoaktivite Soru Çözümü",
+"Özel Görelilik: Michelson-Morley Deneyi","Özel Görelilik: Göreli Zaman","Özel Görelilik: Göreli Uzunluk ve Kütle-Enerji Eşdeğerliği",
+"Özel Görelilik Soru Çözümü",
+"Fotoelektrik Olayı: Hertz Deneyi ve Foton Kavramı","Fotoelektrik Denklemi ve Maksimum Enerji-Frekans Grafiği",
+"Fotoelektrik Akımı ve Doyma Gerilimi","Kesme Gerilimi ve Günlük Hayat Uygulamaları","Fotoelektrik Olayı Soru Çözümü",
+"Compton Saçılması","De Broglie Dalga Boyu (Madde Dalgaları)","Compton Saçılması ve De Broglie Soru Çözümü",
+"Görüntüleme Teknolojileri","Yarı İletken Teknolojisi","Süper İletkenler","Nanoteknoloji, Laser Işınları ve Soru Çözümü"
+]},
+{ ders:"Kimya", kaynak:"Görkem ŞAHİN", konular:[
+"Atomun Kuantum Modeli 1","Atomun Kuantum Modeli 2",
+"Periyodik Sistem ve Elektronların Orbitallere Dizilimi","İyonların Elektron Dağılımı - Küresel Simetri",
+"Periyodik Sistemde Yer Bulma","Periyodik Özellikler 1","Periyodik Özellikler 2",
+"Elementleri Tanıyalım ve Yükseltgenme Basamakları",
+"Modern Atom Teorisi Test 1-2","ÖSYM Ne Sordu? - Atomun Kuantum Modeli",
+"Gazların Özellikleri","Gaz Yasaları","İdeal Gaz Yasası","Gazlarda Kinetik Teori",
+"Gaz Karışımları 1","Gaz Karışımları 2","Gazların Su Üstünde Toplanması ve Gerçek Gazlar",
+"Gazlar Test 1-2","ÖSYM Ne Sordu? - Gazlar",
+"Çözücü ve Çözünen Etkileşimleri","Derişim Birimleri","Molar Derişim (Molarite)",
+"Çözeltinin Karıştırılması","Tepkime Çözeltilerin Karıştırılması","Koligatif Özellikler",
+"Çözeltilerin Sınıflandırılması","Çözünürlük","Çözünürlüğe Etki Eden Faktörler",
+"Sıvı Çözeltiler ve Çözünürlük Test 1","Sıvı Çözeltiler ve Çözünürlük Test 2","ÖSYM Ne Sordu? - Sıvı Çözeltiler",
+"Kimyasal Tepkimelerde Enerji","Standart Oluşum Entalpisi","Bağ Enerjileri ve Hess Yasası",
+"Kimyasal Tepkimelerde Enerji Test 1","ÖSYM Ne Sordu? - Kimyasal Tepkimelerde Enerji",
+"Tepkime Hızları","Tepkime Hızını Etkileyen Faktörler 1","Tepkime Hızını Etkileyen Faktörler 2","Kimyasal Tepkimede Hız",
+"Kimyasal Denge","Denge Sabitleri","Kimyasal Dengeye Etki Eden Faktörler",
+"Kimyasal Tepkimelerde Denge Test 1-2","ÖSYM Ne Sordu? - Kimyasal Tepkimelerde Denge",
+"Sulu Çözeltiler - Asitler ve Bazlar","Sulu Çözeltiler - Asit ve Baz Tanımları",
+"Zayıf Asit ve Zayıf Baz Çözeltilerinde pH ve pOH","Nötralleşme Tepkimeleri",
+"Asit Baz Titrasyonu ve Tampon Çözeltiler","Sulu Çözeltiler Test 1-2",
+"Çözünürlük Dengesi","Çözünürlük Dengesi Test",
+"Aktiflik ve Redoks Tepkimeleri","Redoks Tepkimelerin Denkleştirilmesi","Aktiflik",
+"Elektrotlar ve Elektrokimyasal Hücreler 1","Elektrotlar ve Elektrokimyasal Hücreler 2",
+"Derişim Pilleri","Elektroliz","Kimya ve Elektrik - ÖSYM Ne Sordu?",
+"Karbon Kimyasına Giriş","Organik Bileşikler - Alkanlar","Alkenler (Olefinler)","Alkinler",
+"Alkoller ve Eterler","Aldehit ve Ketonlar","Karboksilik Asitler ve Esterler",
+"Organik Kimya Test 1-2","ÖSYM Ne Sordu? (Organik Kimya)"
+]},
+{ ders:"Biyoloji", kaynak:"42 Günde AYT Biyoloji Kampı", konular:[
+"Nöron Yapısı ve İmpuls İletimi","Nöron Yapısı ve İmpuls İletimi Soru Çözümü",
+"Beyin","Beyin Yapısı ve Görevleri Soru Çözümü",
+"Omurilik ve Çevresel Sinir Sistemi","Omurilik - ÇSS Soru Çözümü",
+"Endokrin Sistem - Hormonlar","Hipofiz Bezi","Endokrin Bezler - Hipofiz Bezi Soru Çözümü",
+"Tiroit - Paratiroit Bezi","Tiroit - Paratiroit Soru Çözümü",
+"Böbrek Üstü Bezi - Pankreas","Böbrek Üstü - Pankreas Soru Çözümü",
+"Eşeysel Bezler ve Diğer Hormonlar","Eşeysel Bezler - Diğer Hormonlar Soru Çözümü",
+"Endokrin Sistem Genel Tekrar Soru Çözümü",
+"Göz - Duyu Organları","Göz Soru Çözümü",
+"Kulak - Duyu Organları","Kulak Soru Çözümü",
+"Burun - Dil - Deri - Duyu Organları","Burun - Dil - Deri Soru Çözümü",
+"Kemik Doku","Kemik Doku Soru Çözümü",
+"Kıkırdak ve Kas Doku","Kas - Kıkırdak Doku - Eklemler Soru Çözümü",
+"Kas Kasılma Mekanizması","Kas Kasılması ve Genel Tekrar Soru Çözümü",
+"Sindirim Organları","Sindirim Organları Soru Çözümü",
+"Karaciğer - Pankreas - Safra Kesesi","Sindirime Yardımcı Organlar Soru Çözümü",
+"Kimyasal Sindirim","Emilim - Sindirim Hastalıkları","Sindirim - Emilim Genel Tekrar Soru Çözümü",
+"Kalp","Kalp Soru Çözümü",
+"Atar - Toplar - Kılcal Damar - Kan Dolaşımı","Kan Damarları Soru Çözümü",
+"Kan Yapısı ve Lenf Dolaşımı","Kan Yapısı ve Lenf Dolaşımı Soru Çözümü",
+"Bağışıklık Sistemi","Bağışıklık Sistemi Soru Çözümü","Dolaşım - Bağışıklık Sistemi Soru Çözümü",
+"Solunum Sistemi - Solunum Organları","Solunum Sistemi Soru Çözümü",
+"Solunum Gazlarının Taşınması","Solunum Gazlarının Taşınması Soru Çözümü",
+"Böbrek Yapısı - Üriner Sistem","Böbrek Yapısı - Üriner Sistem Soru Çözümü",
+"İdrar Oluşumu - Üriner Sistem","İdrar Oluşumu Soru Çözümü","Üriner Sistem Genel Tekrar",
+"Erkek ve Dişi Üreme Sistemi","Erkek ve Dişi Üreme Sistemi Soru Çözümü",
+"Embriyonik Gelişim","Embriyonik Gelişim Soru Çözümü",
+"Komünite Ekolojisi 1","Komünite Ekolojisi 1 Soru Çözümü","Komünite Ekolojisi 2","Komünite Ekolojisi 2 Soru Çözümü",
+"Popülasyon Ekolojisi","Popülasyon Ekolojisi Soru Çözümü","Popülasyon Ekolojisi Genel Tekrar",
+"Nükleik Asitler, Replikasyon","Nükleik Asitler, Replikasyon Soru Çözümü",
+"Protein Sentezi","Protein Sentezi Soru Çözümü",
+"Biyoteknoloji ve Gen Mühendisliği","Biyoteknoloji - Gen Mühendisliği Soru Çözümü",
+"Hücresel Solunum Özet","Glikoliz - Son Ürün Evresi","Glikoliz - Son Ürün Evresi Soru Çözümü",
+"Krebs Döngüsü (Sitrik Asit Döngüsü)","ETS ve Anaerobik Solunum","Hücresel Solunum - Fermantasyon Soru Çözümü",
+"Fotosentez Özet","Fotosentez Evreleri","Fotosentez Soru Çözümü",
+"Fotosentez - Kemosentez","Fotosentez - Kemosentez Soru Çözümü","Solunum - Fotosentez - Kemosentez Soru Çözümü",
+"Bitkisel Dokular","Bitkisel Dokular Soru Çözümü",
+"Bitki Organları","Bitki Organları Soru Çözümü",
+"Bitkide Taşıma","Bitkide Taşıma Soru Çözümü",
+"Bitkisel Hormonlar","Bitkisel Hormonlar Soru Çözümü",
+"Bitkide Hareket","Bitkide Hareket Soru Çözümü",
+"Bitkide Üreme ve Gelişme","Bitkide Üreme ve Gelişme Soru Çözümü",
+"Canlılar ve Çevre",
+"58 Soruyla AYT Biyoloji Deneme Çözümü","51 Soruyla AYT Biyoloji Deneme Çözümü",
+"AYT Biyoloji Full Tekrar"
+]}
+]
+};
+
+/* ---------- DURUM ---------- */
+const DEPO_ANAHTAR = "yksTakipDurumu_v2";
+let durum = {};
+
+function depodanYukle(){
+  try{
+    const ham = localStorage.getItem(DEPO_ANAHTAR);
+    durum = ham ? JSON.parse(ham) : {};
+  }catch(e){ durum = {}; }
+}
+function depoyaKaydet(){
+  try{ localStorage.setItem(DEPO_ANAHTAR, JSON.stringify(durum)); }catch(e){}
+}
+function konuAnahtari(sinavTuru, dersAd, konuIndex){
+  return sinavTuru+"|"+dersAd+"|"+konuIndex;
+}
+function konuDurum(anahtar){
+  return durum[anahtar] || {tamam:false, soru:0};
+}
+
+let aktifSinav = "TYT";
+let acikDersler = {};
+
+/* ---------- BUGÜN PLANI ---------- */
+const PLAN_BASLANGIC = new Date(2026,6,20); // 20 Temmuz 2026, Pazartesi (ay 0-index)
+const GUNLUK_VIDEO_HEDEFI = 2;
+
+function gunIndeksiHesapla(){
+  const su = new Date();
+  const suGun = new Date(su.getFullYear(), su.getMonth(), su.getDate());
+  const fark = Math.round((suGun - PLAN_BASLANGIC) / 86400000);
+  return fark; // 0 = başlangıç günü
+}
+
+function dersTamamMi(sinav, ders){
+  return ders.konular.every((k,i)=> konuDurum(konuAnahtari(sinav, ders.ders, i)).tamam);
+}
+
+function tytTamamMi(){
+  return MUFREDAT.TYT.every(ders=> dersTamamMi("TYT", ders));
+}
+
+function dersSiradakiKonular(sinav, ders, adet){
+  const sonuc = [];
+  for(let i=0;i<ders.konular.length;i++){
+    const a = konuAnahtari(sinav, ders.ders, i);
+    if(!konuDurum(a).tamam){
+      sonuc.push({index:i, ad:ders.konular[i], anahtar:a});
+      if(sonuc.length>=adet) break;
+    }
+  }
+  return sonuc;
+}
+
+function bugunCiz(){
+  const gunIndeksi = gunIndeksiHesapla();
+  const gunNo = gunIndeksi + 1;
+  const tytBitti = tytTamamMi();
+  const planSinav = tytBitti ? "AYT" : "TYT";
+
+  document.getElementById("planGunNo").textContent = gunIndeksi < 0 ? "Henüz başlamadı" : ("Gün " + Math.max(gunNo,1));
+  document.getElementById("planDurum").textContent = tytBitti ? "AYT dönemi" : "TYT dönemi";
+
+  const aciklamaEl = document.getElementById("planAciklama");
+  if(gunIndeksi < 0){
+    const gunler = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+    const aylar = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+    aciklamaEl.textContent = "Çalışma planın "+PLAN_BASLANGIC.getDate()+" "+aylar[PLAN_BASLANGIC.getMonth()]+" "+gunler[PLAN_BASLANGIC.getDay()]+" günü başlayacak. O güne kadar bu sayfa boş görünür, ama Konular sekmesinden istediğin zaman çalışabilirsin.";
+  } else if(tytBitti){
+    aciklamaEl.textContent = "TYT'yi bitirdin! Şimdi sıra AYT'de. Her dersten "+GUNLUK_VIDEO_HEDEFI+" video — alanına göre Matematik, Fizik, Kimya, Biyoloji'den ilerlediğin yere göre devam.";
+  } else {
+    aciklamaEl.textContent = "TYT'nin 10 dersinden günde "+GUNLUK_VIDEO_HEDEFI+"'şer video izle. Bitirdiğinde otomatik olarak AYT'ye geçeceksin.";
+  }
+
+  const listeKapsayici = document.getElementById("bugunListesi");
+  listeKapsayici.innerHTML = "";
+
+  if(gunIndeksi < 0){
+    listeKapsayici.innerHTML = `<div class="tamamlandi-kart"><span class="buyuk-emoji">📅</span>Plan henüz başlamadı.<br>İstersen şimdiden Konular sekmesinden erken başlayabilirsin.</div>`;
+    document.getElementById("planNotKart").textContent = "";
+    return;
+  }
+
+  const dersListesi = MUFREDAT[planSinav];
+  let hicKonuVarMi = false;
+
+  dersListesi.forEach(ders=>{
+    if(dersTamamMi(planSinav, ders)) return;
+    const siradakiler = dersSiradakiKonular(planSinav, ders, GUNLUK_VIDEO_HEDEFI);
+    if(siradakiler.length===0) return;
+    hicKonuVarMi = true;
+
+    const renk = DERS_RENK[ders.ders] || "var(--ink)";
+    const grup = document.createElement("div");
+    grup.className = "bugun-ders-grup";
+    grup.innerHTML = `<div class="bugun-ders-baslik"><span class="renk-cubuk" style="background:${renk}"></span><span>${ders.ders}</span></div>`;
+
+    siradakiler.forEach(s=>{
+      const d = konuDurum(s.anahtar);
+      const satir = document.createElement("div");
+      satir.className = "bugun-konu" + (d.tamam ? " tamam" : "");
+      satir.innerHTML = `
+        <div class="kutucuk" data-anahtar="${s.anahtar}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div class="konu-ad">${s.ad}</div>`;
+      grup.appendChild(satir);
+    });
+
+    listeKapsayici.appendChild(grup);
+  });
+
+  if(!hicKonuVarMi){
+    listeKapsayici.innerHTML = `<div class="tamamlandi-kart"><span class="buyuk-emoji">🎉</span>${planSinav} müfredatının tamamını bitirdin!</div>`;
+  }
+
+  listeKapsayici.querySelectorAll(".kutucuk").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const a = el.getAttribute("data-anahtar");
+      const d = konuDurum(a);
+      d.tamam = !d.tamam;
+      durum[a] = d;
+      depoyaKaydet();
+      bugunCiz();
+      ozetGuncelle();
+    });
+  });
+
+  const notEl = document.getElementById("planNotKart");
+  if(planSinav==="TYT"){
+    notEl.textContent = "Not: 2027 YKS tarihi henüz ÖSYM tarafından resmi açıklanmadı; geçmiş yıllara göre 19-20 Haziran 2027 tahmin ediliyor. Bu tempoyla TYT'yi yaklaşık 34 günde, AYT'yi ise çok daha rahat bir hızla bitirirsin.";
+  } else {
+    notEl.textContent = "Not: 2027 YKS tarihi henüz ÖSYM tarafından resmi açıklanmadı; geçmiş yıllara göre 19-20 Haziran 2027 tahmin ediliyor.";
+  }
+}
+
+/* ---------- ÇİZİM ---------- */
+function dersAlaniCiz(){
+  const kapsayici = document.getElementById("dersAlani");
+  kapsayici.innerHTML = "";
+  const liste = MUFREDAT[aktifSinav];
+  const aramaMetni = (document.getElementById("aramaKutu").value || "").trim().toLocaleLowerCase('tr');
+
+  liste.forEach((ders, dersIndex)=>{
+    const renk = DERS_RENK[ders.ders] || "var(--ink)";
+    const dersAcikAnahtari = aktifSinav+"|"+ders.ders;
+    const acik = !!acikDersler[dersAcikAnahtari] || aramaMetni.length>0;
+
+    let tamamSayisi = 0;
+    let gorunenVarMi = !aramaMetni;
+    ders.konular.forEach((k, i)=>{
+      const a = konuAnahtari(aktifSinav, ders.ders, i);
+      if(konuDurum(a).tamam) tamamSayisi++;
+      if(aramaMetni && k.toLocaleLowerCase('tr').includes(aramaMetni)) gorunenVarMi = true;
+    });
+
+    if(aramaMetni && !gorunenVarMi) return;
+
+    const yuzde = Math.round((tamamSayisi/ders.konular.length)*100);
+
+    const blok = document.createElement("div");
+    blok.className = "ders-blok" + (acik ? " acik" : "");
+
+    const baslik = document.createElement("div");
+    baslik.className = "ders-baslik";
+    baslik.innerHTML = `<span class="renk-cubuk" style="background:${renk}"></span>
+      <h2>${ders.ders}</h2>
+      <span class="kaynak">${ders.kaynak||""}</span>
+      <span class="konu-sayisi">${tamamSayisi}/${ders.konular.length}</span>
+      <svg class="ok-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>`;
+    baslik.addEventListener("click", ()=>{
+      acikDersler[dersAcikAnahtari] = !acikDersler[dersAcikAnahtari];
+      dersAlaniCiz();
+    });
+    blok.appendChild(baslik);
+
+    const cubukDis = document.createElement("div");
+    cubukDis.className = "ders-ilerleme-cubuk";
+    cubukDis.innerHTML = `<div class="ders-ilerleme-ic" style="width:${yuzde}%; background:${renk}"></div>`;
+    blok.appendChild(cubukDis);
+
+    const liste_div = document.createElement("div");
+    liste_div.className = "konu-liste";
+
+    ders.konular.forEach((k, i)=>{
+      const a = konuAnahtari(aktifSinav, ders.ders, i);
+      const d = konuDurum(a);
+      const eslesiyor = !aramaMetni || k.toLocaleLowerCase('tr').includes(aramaMetni);
+      const satir = document.createElement("div");
+      satir.className = "konu" + (d.tamam ? " tamam" : "") + (eslesiyor ? "" : " gizli-arama");
+      satir.innerHTML = `
+        <div class="kutucuk" data-anahtar="${a}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div class="konu-ad">${k}</div>
+        <div class="soru-girisi">
+          <input type="number" min="0" inputmode="numeric" value="${d.soru||""}" placeholder="0" data-soru-anahtar="${a}">
+          <span>soru</span>
+        </div>`;
+      liste_div.appendChild(satir);
+    });
+
+    blok.appendChild(liste_div);
+    kapsayici.appendChild(blok);
+  });
+
+  kapsayici.querySelectorAll(".kutucuk").forEach(el=>{
+    el.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const a = el.getAttribute("data-anahtar");
+      const d = konuDurum(a);
+      d.tamam = !d.tamam;
+      durum[a] = d;
+      depoyaKaydet();
+      dersAlaniCiz();
+      ozetGuncelle();
+    });
+  });
+
+  kapsayici.querySelectorAll("[data-soru-anahtar]").forEach(el=>{
+    el.addEventListener("click", (e)=> e.stopPropagation());
+    el.addEventListener("input", ()=>{
+      const a = el.getAttribute("data-soru-anahtar");
+      const d = konuDurum(a);
+      d.soru = parseInt(el.value)||0;
+      durum[a] = d;
+      depoyaKaydet();
+      ozetGuncelle();
+    });
+  });
+}
+
+function aramaUygula(){ dersAlaniCiz(); }
+
+function hepsiniAc(){
+  MUFREDAT[aktifSinav].forEach(ders=>{
+    acikDersler[aktifSinav+"|"+ders.ders] = true;
+  });
+  dersAlaniCiz();
+}
+function hepsiniKapat(){
+  MUFREDAT[aktifSinav].forEach(ders=>{
+    acikDersler[aktifSinav+"|"+ders.ders] = false;
+  });
+  dersAlaniCiz();
+}
+
+function ozetGuncelle(){
+  let toplamKonu=0, tamamKonu=0, toplamSoru=0;
+  ["TYT","AYT"].forEach(sinav=>{
+    MUFREDAT[sinav].forEach(ders=>{
+      ders.konular.forEach((k,i)=>{
+        const a = konuAnahtari(sinav, ders.ders, i);
+        const d = konuDurum(a);
+        toplamKonu++;
+        if(d.tamam) tamamKonu++;
+        toplamSoru += (d.soru||0);
+      });
+    });
+  });
+  document.getElementById("ozetTamam").textContent = tamamKonu;
+  document.getElementById("ozetToplam").textContent = toplamKonu;
+  document.getElementById("ozetSoru").textContent = toplamSoru;
+  document.getElementById("ozetYuzde").textContent = "%"+(toplamKonu? Math.round((tamamKonu/toplamKonu)*100):0);
+
+  istatistikCiz();
+}
+
+function istatistikCiz(){
+  const kapsayici = document.getElementById("istatistikIcerik");
+  kapsayici.innerHTML = "";
+  ["TYT","AYT"].forEach(sinav=>{
+    MUFREDAT[sinav].forEach(ders=>{
+      let tamam=0;
+      ders.konular.forEach((k,i)=>{
+        const a = konuAnahtari(sinav, ders.ders, i);
+        if(konuDurum(a).tamam) tamam++;
+      });
+      const yuzde = Math.round((tamam/ders.konular.length)*100);
+      const renk = DERS_RENK[ders.ders] || "var(--ink)";
+      const etiket = sinav + " " + ders.ders;
+      const satir = document.createElement("div");
+      satir.className = "cubuk-satir";
+      satir.innerHTML = `
+        <div class="cubuk-etiket">${etiket}</div>
+        <div class="cubuk-arka"><div class="cubuk-ic" style="width:${yuzde}%; background:${renk}"></div></div>
+        <div class="cubuk-yuzde">%${yuzde}</div>`;
+      kapsayici.appendChild(satir);
+    });
+  });
+}
+
+function sinavSec(sinav){
+  aktifSinav = sinav;
+  document.querySelectorAll(".sekme").forEach(b=>{
+    b.classList.toggle("aktif", b.getAttribute("data-sinav")===sinav);
+  });
+  document.getElementById("aramaKutu").value = "";
+  dersAlaniCiz();
+}
+
+function sayfaGec(ad){
+  document.getElementById("sayfa-bugun").classList.toggle("gizli", ad!=="bugun");
+  document.getElementById("sayfa-ana").classList.toggle("gizli", ad!=="ana");
+  document.getElementById("sayfa-istatistik").classList.toggle("gizli", ad!=="istatistik");
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    b.classList.toggle("aktif", b.getAttribute("data-sayfa")===ad);
+  });
+  if(ad==="istatistik") istatistikCiz();
+  if(ad==="bugun") bugunCiz();
+}
+
+function sifirla(){
+  if(confirm("Tüm ilerleme silinecek. Onaylıyor musun?")){
+    durum = {};
+    depoyaKaydet();
+    dersAlaniCiz();
+    ozetGuncelle();
+    bugunCiz();
+  }
+}
+
+/* ---------- TARİH & GÜN SAYACI ---------- */
+function tarihYaz(){
+  const gunler = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+  const aylar = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+  const su = new Date();
+  document.getElementById("bugunTarih").textContent = su.getDate()+" "+aylar[su.getMonth()]+" • "+gunler[su.getDay()];
+}
+
+function gunSayaciCiz(){
+  const kapsayici = document.getElementById("gunSayac");
+  kapsayici.innerHTML = "";
+  const su = new Date();
+  const gun = (su.getDay()+6)%7; // Pazartesi=0
+  for(let i=0;i<7;i++){
+    const nokta = document.createElement("div");
+    nokta.className = "gun-nokta" + (i<=gun ? " dolu" : "");
+    kapsayici.appendChild(nokta);
+  }
+}
+
+/* ---------- BAŞLAT ---------- */
+depodanYukle();
+tarihYaz();
+gunSayaciCiz();
+dersAlaniCiz();
+ozetGuncelle();
+bugunCiz();
+</script>
+
+</body>
+</html>
