@@ -281,6 +281,15 @@ body{
   background:var(--card); border:1px solid var(--line); border-radius:12px;
   font-family:-apple-system,sans-serif; font-size:12px; color:var(--gray); line-height:1.6;
 }
+
+.tam-ekran-btn {
+  position:fixed; bottom:90px; right:16px; z-index:100;
+  width:44px; height:44px; border-radius:50%;
+  background:var(--gold); border:none;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 12px rgba(0,0,0,0.4);
+}
+.tam-ekran-btn svg { width:20px; height:20px; color:var(--paper); }
 </style>
 </head>
 <body>
@@ -1190,6 +1199,22 @@ function gunSayaciCiz(){
   }
 }
 
+
+function tamEkranAc() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+}
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.querySelector('.tam-ekran-btn');
+  if (document.fullscreenElement) {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
+  } else {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+  }
+});
+
 /* ---------- BAŞLAT ---------- */
 depodanYukle();
 tarihYaz();
@@ -1198,6 +1223,13 @@ dersAlaniCiz();
 ozetGuncelle();
 bugunCiz();
 </script>
+
+
+<button class="tam-ekran-btn" onclick="tamEkranAc()" title="Tam Ekran">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+  </svg>
+</button>
 
 </body>
 </html>
